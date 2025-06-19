@@ -2,7 +2,7 @@ package dev.bd.work.socialnetwork.notifier.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.bd.work.socialnetwork.notifier.dto.PostDto;
+import dev.bd.work.socialnetwork.notifier.dto.PostDomainEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -29,7 +29,7 @@ public class PostDomainEventConsumer {
     public void handle(@Payload String payload) {
         try {
             log.debug("Received post domain event: {}", payload);
-            PostDto post = objectMapper.readValue(payload, PostDto.class);
+            PostDomainEvent post = objectMapper.readValue(payload, PostDomainEvent.class);
             sender.sendMessageToUser(post.getUserId(), payload);
         } catch (JsonProcessingException e) {
             log.error("Payload has wrong structure. Skip message", e);
