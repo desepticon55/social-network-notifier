@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Client</title>
+</head>
+<body>
+<h1>WebSocket Client</h1>
+
+<label>
+    User ID:
+    <input type="text" id="userId" value="user-123">
+</label>
+<button onclick="connect()">Connect</button>
+
+<pre id="log"></pre>
+
+<script>
+    let socket;
+
+    function connect() {
+        const userId = document.getElementById('userId').value;
+        const wsUrl = `ws://localhost:8080/ws?userId=${encodeURIComponent(userId)}`;
+
+        log(`Connecting to ${wsUrl}`);
+        socket = new WebSocket(wsUrl);
+
+        socket.onopen = () => {
+            log("✅ WebSocket connection opened");
+        };
+
+        socket.onmessage = (event) => {
+            log(`📩 Message from server: ${event.data}`);
+        };
+
+        socket.onerror = (error) => {
+            log(`❌ WebSocket error: ${JSON.stringify(error)}`);
+        };
+
+        socket.onclose = () => {
+            log("❎ WebSocket connection closed");
+        };
+    }
+
+    function log(message) {
+        const logElem = document.getElementById('log');
+        logElem.textContent += message + '\n';
+    }
+</script>
+</body>
+</html>

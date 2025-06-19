@@ -1,0 +1,59 @@
+server:
+  port: ${PORT_TO_EXPOSE:8080}
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: social-network-notifier
+  main:
+    allow-bean-definition-overriding: true
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9093}
+    consumer:
+      group-id: social-network-notifier
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+management:
+  security:
+    enabled: false
+  health:
+    ldap:
+      enabled: false
+    jms:
+      enabled: false
+    cassandra:
+      enabled: true
+  endpoint:
+    startup:
+      enabled: true
+    health:
+      enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  endpoints:
+    web.exposure.include: health,prometheus,startup
+    enabled-by-default: false
+
+
+social-network:
+  post:
+    topic: post-domain-event
+
+logging:
+  level:
+    dev.bd.work.socialnetwork: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    com:
+      zaxxer:
+        hikari: INFO
+
+#debug: true

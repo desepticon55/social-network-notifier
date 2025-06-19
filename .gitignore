@@ -1,0 +1,12 @@
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+build
+target
+log/
+ObjectStore
+.DS_Store
+/static
+/.idea/
